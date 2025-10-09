@@ -17,7 +17,7 @@ if not game:IsLoaded() then
     notLoaded:Destroy()
 end
 
-currentVersion = "6.3.4"
+currentVersion = "6.3.5"
 
 ScaledHolder = Instance.new("Frame")
 Scale = Instance.new("UIScale")
@@ -8514,11 +8514,7 @@ addcmd('partpath',{'partname'},function(args, speaker)
 end)
 
 addcmd('antiafk',{'antiidle'},function(args, speaker)
-    local VirtualUser = cloneref(game:GetService("VirtualUser"))
-	Players.LocalPlayer.Idled:Connect(function()
-		VirtualUser:CaptureController()
-		VirtualUser:ClickButton2(Vector2.new())
-	end)
+    table.foreach(getconnections(game.Players.LocalPlayer.Idled), function(Index, Table) Table:Disconnect() end)
 	if not (args[1] and tostring(args[1]) == 'nonotify') then notify('Anti Idle','Anti idle is enabled') end
 end)
 
