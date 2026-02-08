@@ -4521,12 +4521,12 @@ CMDs[#CMDs + 1] = {NAME = 'breakloops / break (cmd loops)', DESC = 'Stops any cm
 CMDs[#CMDs + 1] = {NAME = '', DESC = ''}
 CMDs[#CMDs + 1] = {NAME = 'noclip', DESC = 'Go through objects'}
 CMDs[#CMDs + 1] = {NAME = 'unnoclip / clip', DESC = 'Disables noclip'}
-CMDs[#CMDs + 1] = {NAME = 'fly [speed]', DESC = 'Makes you fly'}
-CMDs[#CMDs + 1] = {NAME = 'unfly', DESC = 'Disables fly'}
-CMDs[#CMDs + 1] = {NAME = 'flyspeed [num]', DESC = 'Set fly speed (default is 20)'}
-CMDs[#CMDs + 1] = {NAME = 'vehiclefly / vfly [speed]', DESC = 'Makes you fly in a vehicle'}
-CMDs[#CMDs + 1] = {NAME = 'unvehiclefly / unvfly', DESC = 'Disables vehicle fly'}
-CMDs[#CMDs + 1] = {NAME = 'vehicleflyspeed  / vflyspeed [num]', DESC = 'Set vehicle fly speed'}
+-- CMDs[#CMDs + 1] = {NAME = 'fly [speed]', DESC = 'Makes you fly'}
+-- CMDs[#CMDs + 1] = {NAME = 'unfly', DESC = 'Disables fly'}
+-- CMDs[#CMDs + 1] = {NAME = 'flyspeed [num]', DESC = 'Set fly speed (default is 20)'}
+CMDs[#CMDs + 1] = {NAME = 'fly / vfly [speed]', DESC = 'Makes you fly in a vehicle'}
+CMDs[#CMDs + 1] = {NAME = 'unfly / unvfly', DESC = 'Disables vehicle fly'}
+CMDs[#CMDs + 1] = {NAME = 'flyspeed  / vflyspeed [num]', DESC = 'Set vehicle fly speed'}
 CMDs[#CMDs + 1] = {NAME = 'cframefly / cfly [speed]', DESC = 'Makes you fly, bypassing some anti cheats (works on mobile)'}
 CMDs[#CMDs + 1] = {NAME = 'uncframefly / uncfly', DESC = 'Disables cfly'}
 CMDs[#CMDs + 1] = {NAME = 'cframeflyspeed  / cflyspeed [num]', DESC = 'Sets cfly speed'}
@@ -7043,8 +7043,11 @@ function sFLY(vfly)
 
 	local function FLY()
 		FLYING = true
+        local String = randomString()
 		local BG = Instance.new('BodyGyro')
 		local BV = Instance.new('BodyVelocity')
+        BG.Name = String
+		BV.Name = String
 		BG.P = 9e4
 		BG.Parent = T
 		BV.Parent = T
@@ -7221,30 +7224,6 @@ addcmd('fly',{},function(args, speaker)
 	if not IsOnMobile then
 		NOFLY()
 		wait()
-		sFLY()
-	else
-		mobilefly(speaker)
-	end
-	if args[1] and isNumber(args[1]) then
-		iyflyspeed = args[1]
-	end
-end)
-
-addcmd('flyspeed',{'flysp'},function(args, speaker)
-	local speed = args[1] or 1
-	if isNumber(speed) then
-		iyflyspeed = speed
-	end
-end)
-
-addcmd('unfly',{'nofly','novfly','unvehiclefly','novehiclefly','unvfly'},function(args, speaker)
-	if not IsOnMobile then NOFLY() else unmobilefly(speaker) end
-end)
-
-addcmd('vfly',{'vehiclefly'},function(args, speaker)
-	if not IsOnMobile then
-		NOFLY()
-		wait()
 		sFLY(true)
 	else
 		mobilefly(speaker, true)
@@ -7254,18 +7233,22 @@ addcmd('vfly',{'vehiclefly'},function(args, speaker)
 	end
 end)
 
-addcmd('togglevfly',{},function(args, speaker)
+addcmd('flyspeed',{'flysp'},function(args, speaker)
+	local speed = args[1] or 1
+	if isNumber(speed) then
+		vehicleflyspeed = speed
+	end
+end)
+
+addcmd('unfly',{'nofly','novfly','unvehiclefly','novehiclefly','unvfly'},function(args, speaker)
+	if not IsOnMobile then NOFLY() else unmobilefly(speaker) end
+end)
+
+addcmd('togglefly',{},function(args, speaker)
 	if FLYING then
 		if not IsOnMobile then NOFLY() else unmobilefly(speaker) end
 	else
 		if not IsOnMobile then sFLY(true) else mobilefly(speaker, true) end
-	end
-end)
-
-addcmd('vflyspeed',{'vflysp','vehicleflyspeed','vehicleflysp'},function(args, speaker)
-	local speed = args[1] or 1
-	if isNumber(speed) then
-		vehicleflyspeed = speed
 	end
 end)
 
@@ -7274,14 +7257,6 @@ addcmd('qefly',{'flyqe'},function(args, speaker)
 		QEfly = false
 	else
 		QEfly = true
-	end
-end)
-
-addcmd('togglefly',{},function(args, speaker)
-	if FLYING then
-		if not IsOnMobile then NOFLY() else unmobilefly(speaker) end
-	else
-		if not IsOnMobile then sFLY() else mobilefly(speaker) end
 	end
 end)
 
@@ -13249,9 +13224,9 @@ end)
 -- 	end)
 
 -- 	if success then
--- 		-- if teleport ~= latestVersionInfo.Version then
--- 		-- 	notify("Outdated", "Get the new version at infyiff.github.io")
--- 		-- end
+-- 		if currentVersion ~= latestVersionInfo.Version then
+-- 			notify("Outdated", "Get the new version at infyiff.github.io")
+-- 		end
 
 -- 		if latestVersionInfo.Announcement and latestVersionInfo.Announcement ~= "" then
 -- 			local AnnGUI = Instance.new("Frame")
