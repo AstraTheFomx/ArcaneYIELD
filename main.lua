@@ -7053,7 +7053,7 @@ function sFLY(vfly)
 		BV.Parent = T
 		BG.MaxTorque = Vector3.new(math.huge, math.huge, math.huge)
 		BG.CFrame = T.CFrame
-		BV.Velocity = Vector3.new(math.huge, math.huge, math.huge)
+		BV.Velocity = Vector3.new(0,0,0)
 		BV.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
 		task.spawn(function()
 			repeat task.wait()
